@@ -61,11 +61,5 @@ def contactsheet(imlist, n_col):
 
 os.chdir("LabelledImages")
 imlist = os.listdir(os.getcwd())
-n_col = input('Enter number of columns:')
 
-try:
-    n_col = int(n_col)
-except: # Default number of cols is 5
-    n_col = 5
-
-contactsheet(imlist, n_col)
+contactsheet(imlist, 5)
