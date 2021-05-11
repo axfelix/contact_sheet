@@ -8,7 +8,9 @@ def add_label(dir):
     os.makedirs("LabelledImages")
     for filename in dir:
         f = filename.lower()
-        if not (f.endswith(".tiff") or f.endswith(".jpg")): continue
+        ext = f.split('.')[len(f.split('.'))-1]
+        e_list = ['png', 'jpg', 'tiff', 'gif', 'jp2', 'jpm', 'jpx', 'bmd', 'pct', 'psd', 'tga']
+        if not ext in e_list: continue
         else:            
             img = Image.open(filename)
             img.thumbnail((300,300))
@@ -25,6 +27,8 @@ def add_label(dir):
             else:
                 labelled.text((5,5), txt, font = font, fill = 'black')
             newim.save("LabelledImages\\"+"L_"+filename)
+            newim.close()
+            img.close()
 
 # Get file names of images and run function
 dir = os.listdir(os.getcwd())
@@ -58,6 +62,8 @@ def contactsheet(imlist, n_col):
             bg.paste(im, (350*count, 350*q))
             count += 1
             bg.save("contact_sheet.pdf")
+    bg.close()
+    im.close()
 
 os.chdir("LabelledImages")
 imlist = os.listdir(os.getcwd())
