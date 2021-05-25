@@ -1,5 +1,6 @@
 import os
-from PIL import Image, ImageFont, ImageDraw, ImageColor
+import sys
+from PIL import Image, ImageFont, ImageDraw
 from PyPDF2 import PdfFileMerger
 
 # Purpose: Create a contact sheet for a folder of images. Resize and label images, then arrange in a grid in a single file. Convert to pdf. Before running, ensure working directory is the folder with images to be processed.
@@ -21,13 +22,21 @@ def add_label(dir):
             newim.paste(img, ((new_size[0]-old_size[0])//2,
                       (new_size[1]-old_size[1])//2))
             labelled = ImageDraw.Draw(newim)
-            font = ImageFont.truetype('arial.ttf', 38)
+            if sys.platform.startswith('darwin'):
+                font = ImageFont.truetype('/Library/Fonts/Arial.ttf', 38)
+            elif sys.platform.startswith('win'):
+                font = ImageFont.truetype('arial.ttf', 38)
+            else:
+                font = ImageFont.load_default()
             txt = str(dir.index(filename)+1)+ "_" + filename[:filename.index(".")]
             if len(txt) > 10:
                 labelled.text((5,5), txt[0:10], font = font, fill = 'white')
             else:
                 labelled.text((5,5), txt, font = font, fill = 'white')
-            newim.save("LabelledImages\\" + "L_"+filename)
+            if sys.platform.startswith('win'):
+                newim.save("LabelledImages\\" + "L_" + filename)
+            else:
+                newim.save('LabelledImages/' + "L_" + filename)
             newim.close()
             img.close()
 
@@ -52,6 +61,7 @@ def contactsheet(imlist, n_col):
             im = Image.open(imlist[n_col*i+j])
             bg.paste(im, (300*j, 300*i))
             j += 1
+            im.close()
         bg.save("contact_sheet.jpg")
     if r != 0:
         k = n_col*q
@@ -61,8 +71,8 @@ def contactsheet(imlist, n_col):
             bg.paste(im, (300*count, 300*q))
             count += 1
             bg.save("contact_sheet.jpg")
+            im.close()
     bg.close()
-    im.close()
 
 
 os.chdir("LabelledImages")
@@ -71,8 +81,6 @@ imlist = os.listdir(os.getcwd())
 contactsheet(imlist, 5)
 
 #To divide long sheets into multi-page pdf
-
-
 def multi_pg(cs):
     im = Image.open(cs)
     w,h = im.size
@@ -98,7 +106,7 @@ def multi_pg(cs):
     merger.write('contact_sheet.pdf')
     merger.close()
     im.close()
-    cr.close()
+
     
 multi_pg("contact_sheet.jpg")
 
