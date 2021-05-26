@@ -8,12 +8,14 @@ from PyPDF2 import PdfFileMerger
 # Function to add text to images (ie, label by fname)
 def add_label(dir):
     os.makedirs("LabelledImages")
+    im_count = 0
     for filename in dir:
         f = filename.lower()
         ext = f.split('.')[len(f.split('.'))-1]
         e_list = ['png', 'jpg', 'tiff', 'gif', 'jp2', 'jpm', 'jpx', 'bmd', 'pct', 'psd', 'tga']
         if not ext in e_list: continue
-        else:            
+        else:
+            im_count += 1
             img = Image.open(filename)
             img.thumbnail((250,250))
             old_size = img.size
@@ -28,7 +30,7 @@ def add_label(dir):
                 font = ImageFont.truetype('arial.ttf', 38)
             else:
                 font = ImageFont.load_default()
-            txt = str(dir.index(filename)+1)+ "_" + filename[:filename.index(".")]
+            txt = str(im_count) + "_" + filename[:filename.index(".")]
             if len(txt) > 10:
                 labelled.text((5,5), txt[0:10], font = font, fill = 'white')
             else:
