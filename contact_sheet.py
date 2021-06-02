@@ -3,7 +3,8 @@ import sys
 from PIL import Image, ImageFont, ImageDraw
 from PyPDF2 import PdfFileMerger
 
-# Purpose: Create a contact sheet for a folder of images. Resize and label images, then arrange in a grid in a single file. Convert to pdf. Before running, ensure working directory is the folder with images to be processed.
+# Purpose: Create a contact sheet for a folder of images. Resize and label images, then arrange in a grid in a single file.
+# Convert to pdf. Before running, ensure working directory is the folder with images to be processed.
 
 # Function to add text to images (ie, label by fname)
 def add_label(dir):
@@ -36,17 +37,24 @@ def add_label(dir):
             else:
                 labelled.text((5,5), txt, font = font, fill = 'white')
             if sys.platform.startswith('win'):
-                newim.save("LabelledImages\\" + "L_" + filename)
+                newim.save("LabelledImages\\" + str(im_count) + "_" + filename)
             else:
-                newim.save('LabelledImages/' + "L_" + filename)
+                newim.save("LabelledImages/" + str(im_count) + "_" + filename)
             newim.close()
             img.close()
 
 # Get file names of images and run function
-dir = os.listdir(os.getcwd())
+loc = input('Enter folder location:')
+try:
+    os.chdir(loc)
+    dir = os.listdir(os.getcwd())
+except:
+    print('Error: invalid directory')
+    quit()
+
 add_label(dir)
 
-#Tile the images 
+#Tile the images
 def contactsheet(imlist, n_col):
     n_img = len(imlist)   # number of  images
     q = n_img//n_col   # quotient, or number of full rows
@@ -80,7 +88,7 @@ def contactsheet(imlist, n_col):
 os.chdir("LabelledImages")
 imlist = os.listdir(os.getcwd())
 
-contactsheet(imlist, 5)
+contactsheet(sorted(imlist), 5)
 
 #To divide long sheets into multi-page pdf
 def multi_pg(cs):
@@ -108,7 +116,6 @@ def multi_pg(cs):
     merger.write('contact_sheet.pdf')
     merger.close()
     im.close()
-
     
 multi_pg("contact_sheet.jpg")
 
@@ -118,6 +125,5 @@ os.remove('contact_sheet.jpg')
 dir = os.listdir(os.getcwd())
 
 for filename in dir:
-    if filename.startswith('L_'): os.remove(filename)
     if filename.startswith('pg') and filename.endswith('.pdf'):
         os.remove(filename)

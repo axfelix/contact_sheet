@@ -1,7 +1,7 @@
 # Contact Sheet
 
-Command line script to convert a folder of image files into a labelled contact sheet document. 
+Command line script to convert a folder of image files into a labelled contact sheet pdf document. 
 
-Before running the script, either save the py file in the same folder as the images to be processed or ensure that the working directory in the command line is the image folder.
+When prompted, enter the directory location of the folder of files to be processed.
 
-Number of columns for contact sheet grid is defaulted to five. Edit script to change if needed.
+The number of columns for contact sheet grid is defaulted to five. Edit script to change if needed.
