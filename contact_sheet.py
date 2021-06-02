@@ -2,13 +2,14 @@ import os
 import sys
 from PIL import Image, ImageFont, ImageDraw
 from PyPDF2 import PdfFileMerger
+from shutil import copyfile
 
 # Purpose: Create a contact sheet for a folder of images. Resize and label images, then arrange in a grid in a single file.
 # Convert to pdf. Before running, ensure working directory is the folder with images to be processed.
 
 # Function to add text to images (ie, label by fname)
 def add_label(dir):
-    os.makedirs("LabelledImages")
+    os.makedirs("access")
     im_count = 0
     for filename in dir:
         f = filename.lower()
@@ -37,9 +38,9 @@ def add_label(dir):
             else:
                 labelled.text((5,5), txt, font = font, fill = 'white')
             if sys.platform.startswith('win'):
-                newim.save("LabelledImages\\" + str(im_count) + "_" + filename)
+                newim.save("access\\" + str(im_count) + "_" + filename)
             else:
-                newim.save("LabelledImages/" + str(im_count) + "_" + filename)
+                newim.save("access/" + str(im_count) + "_" + filename)
             newim.close()
             img.close()
 
@@ -85,10 +86,10 @@ def contactsheet(imlist, n_col):
     bg.close()
 
 
-os.chdir("LabelledImages")
+os.chdir("access")
 imlist = os.listdir(os.getcwd())
-
-contactsheet(sorted(imlist), 5)
+imlist.sort(key = lambda x: int(x.split("_")[0]))
+contactsheet(imlist, 5)
 
 #To divide long sheets into multi-page pdf
 def multi_pg(cs):
@@ -118,12 +119,15 @@ def multi_pg(cs):
     im.close()
     
 multi_pg("contact_sheet.jpg")
+copyfile("contact_sheet.pdf", os.path.join(loc, "contact_sheet.pdf"))
 
 #Clean up files
 os.remove('contact_sheet.jpg')
 
-dir = os.listdir(os.getcwd())
+dir2 = os.listdir(os.getcwd())
 
-for filename in dir:
+for filename in dir2:
+    if filename in imlist:
+        os.remove(filename)
     if filename.startswith('pg') and filename.endswith('.pdf'):
         os.remove(filename)
