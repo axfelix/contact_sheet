@@ -14,7 +14,7 @@ def add_label(dir):
     for filename in dir:
         f = filename.lower()
         ext = f.split('.')[len(f.split('.'))-1]
-        e_list = ['png', 'jpg', 'tiff', 'gif', 'jp2', 'jpm', 'jpx', 'bmd', 'pct', 'psd', 'tga']
+        e_list = ['png', 'jpg', 'jpeg', 'tiff', 'gif', 'jp2', 'jpm', 'jpx', 'bmd', 'pct', 'psd', 'tga']
         if not ext in e_list: continue
         else:
             im_count += 1
