@@ -12,9 +12,8 @@ def add_label(dir):
     os.makedirs("access")
     im_count = 0
     for filename in dir:
-        f = filename.lower()
-        ext = f.split('.')[len(f.split('.'))-1]
-        e_list = ['png', 'jpg', 'jpeg', 'tiff', 'gif', 'jp2', 'jpm', 'jpx', 'bmd', 'pct', 'psd', 'tga']
+        ext = os.path.splitext(filename)[1]
+        e_list = ['.png', '.jpg', '.jpeg', '.tiff', '.gif', '.jp2', '.jpm', '.jpx', '.bmd', '.pct', '.psd', '.tga']
         if not ext in e_list: continue
         else:
             im_count += 1
@@ -37,10 +36,7 @@ def add_label(dir):
                 labelled.text((5,5), txt[0:10], font = font, fill = 'white')
             else:
                 labelled.text((5,5), txt, font = font, fill = 'white')
-            if sys.platform.startswith('win'):
-                newim.save("access\\" + str(im_count) + "_" + filename)
-            else:
-                newim.save("access/" + str(im_count) + "_" + filename)
+            newim.save(os.path.join("access", (str(im_count)+"_"+filename)))
             newim.close()
             img.close()
 
