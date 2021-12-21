@@ -12,7 +12,7 @@ def add_label(dir):
     os.makedirs("access")
     im_count = 0
     for filename in dir:
-        ext = os.path.splitext(filename)[1]
+        ext = os.path.splitext(filename)[1].lower()
         e_list = ['.png', '.jpg', '.jpeg', '.tiff', '.gif', '.jp2', '.jpm', '.jpx', '.bmd', '.pct', '.psd', '.tga']
         if not ext in e_list: continue
         else:
