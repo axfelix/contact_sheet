@@ -1,7 +1,7 @@
 import os
 import sys
 from PIL import Image, ImageFont, ImageDraw
-from PyPDF2 import PdfFileMerger
+from PyPDF2 import PdfMerger
 from shutil import copyfile
 
 # Purpose: Create a contact sheet for a folder of images. Resize and label images, then arrange in a grid in a single file.
@@ -107,7 +107,7 @@ def multi_pg(cs):
     for file in dir:
         if file.endswith('.pdf'):
             pdfs.append(file)
-    merger = PdfFileMerger()
+    merger = PdfMerger()
     for pdf in pdfs:
         merger.append(pdf)
     merger.write('contact_sheet.pdf')
