@@ -110,12 +110,13 @@ def multi_pg(cs):
     merger = PdfMerger()
     for pdf in pdfs:
         merger.append(pdf)
-    merger.write('contact_sheet.pdf')
+    merger.write((os.path.basename(loc)+"-contact_sheet.pdf"))
     merger.close()
     im.close()
     
 multi_pg("contact_sheet.jpg")
-copyfile("contact_sheet.pdf", os.path.join(loc, "contact_sheet.pdf"))
+copyfile((os.path.basename(loc)+"-contact_sheet.pdf"),
+         os.path.join(loc, (os.path.basename(loc)+"-contact_sheet.pdf")))
 
 #Clean up files
 os.remove('contact_sheet.jpg')
